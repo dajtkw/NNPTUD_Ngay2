@@ -384,7 +384,6 @@ class ProductTableApp {
                     <span class="badge badge-category rounded-pill px-3 py-1">
                         ${this.escapeHtml(product.category.name)}
                     </span>
-                    <div class="small text-muted mt-1">ID: ${product.category.id}</div>
                 </td>
                 <td class="small">${this.escapeHtml(description)}</td>
                 <td>${imagesHtml}</td>
