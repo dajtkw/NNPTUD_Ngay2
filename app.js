@@ -375,10 +375,7 @@ class ProductTableApp {
             
             row.innerHTML = `
                 <td class="fw-bold">#${product.id}</td>
-                <td>
-                    <div class="fw-semibold">${this.escapeHtml(product.title)}</div>
-                    <small class="text-muted">${this.escapeHtml(product.slug)}</small>
-                </td>
+                <td class="fw-semibold">${this.escapeHtml(product.title)}</td>
                 <td class="${priceClass}">$${price.toFixed(2)}</td>
                 <td>
                     <span class="badge badge-category rounded-pill px-3 py-1">
