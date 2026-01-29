@@ -84,7 +84,7 @@ class ProductTableApp {
      * Handle search input change (called from HTML oninput)
      * @param {string} value - Search term
      */
-    handleSearchChange(value) {
+    onChanged(value) {
         this.searchTerm = value;
         this.applyFilters();
     }
