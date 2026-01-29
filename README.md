@@ -1,4 +1,3 @@
-## Tác giả
 Bùi Thành Đạt 2280600563
 
 ## Cách chạy dự án với Node.js
