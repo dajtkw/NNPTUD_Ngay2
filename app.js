@@ -9,11 +9,6 @@ class ProductTableApp {
         this.selectedCategory = '';
         this.sortField = 'id';
         this.sortAscending = true;
-        this.sortStates = {
-            'title': { ascending: true, icon: 'bi-sort-alpha-down' },
-            'price': { ascending: true, icon: 'bi-sort-numeric-down' },
-            'id': { ascending: true, icon: 'bi-sort-numeric-down' }
-        };
         
         // Initialize the application
         this.init();
@@ -32,8 +27,8 @@ class ProductTableApp {
         // Render the initial view
         this.render();
         
-        // Update sort icons
-        this.updateSortIcons();
+        // Update sort dropdown
+        this.updateSortDropdown();
     }
     
     /**
@@ -73,6 +68,14 @@ class ProductTableApp {
         // Search input event is handled via oninput attribute in HTML
         // Category filter event is handled via onchange attribute in HTML
         
+        // Sort dropdown event
+        const sortDropdown = document.getElementById('sort-dropdown');
+        if (sortDropdown) {
+            sortDropdown.addEventListener('change', (e) => {
+                this.handleSortChange(e.target.value);
+            });
+        }
+        
         // Update page size info
         document.getElementById('page-size-info').textContent = this.pageSize;
     }
@@ -96,47 +99,75 @@ class ProductTableApp {
     }
     
     /**
-     * Toggle sort for a specific field
-     * @param {string} field - Field to sort by
+     * Handle sort dropdown change
+     * @param {string} value - Sort option value
      */
-    toggleSort(field) {
-        if (this.sortField === field) {
-            // Toggle direction if same field
-            this.sortAscending = !this.sortAscending;
-            this.sortStates[field].ascending = this.sortAscending;
-        } else {
-            // Switch to new field with default ascending order
-            this.sortField = field;
-            this.sortAscending = true;
-            this.sortStates[field].ascending = true;
+    handleSortChange(value) {
+        switch(value) {
+            case 'title_asc':
+                this.sortField = 'title';
+                this.sortAscending = true;
+                break;
+            case 'title_desc':
+                this.sortField = 'title';
+                this.sortAscending = false;
+                break;
+            case 'price_asc':
+                this.sortField = 'price';
+                this.sortAscending = true;
+                break;
+            case 'price_desc':
+                this.sortField = 'price';
+                this.sortAscending = false;
+                break;
+            case 'id_asc':
+            default:
+                this.sortField = 'id';
+                this.sortAscending = true;
+                break;
         }
         
-        // Update sort icons
-        this.updateSortIcons();
-        
-        // Apply filters with new sort
         this.applyFilters();
     }
     
     /**
-     * Update sort icons in UI
+     * Update sort dropdown selection
      */
-    updateSortIcons() {
-        // Update title sort icon
-        const titleIcon = document.getElementById('title-sort-icon');
+    updateSortDropdown() {
+        const sortDropdown = document.getElementById('sort-dropdown');
+        if (!sortDropdown) return;
+        
+        let value = 'id_asc'; // default
         if (this.sortField === 'title') {
-            titleIcon.className = this.sortAscending ? 'bi bi-sort-alpha-down' : 'bi bi-sort-alpha-up';
-        } else {
-            titleIcon.className = 'bi bi-sort-alpha-down';
+            value = this.sortAscending ? 'title_asc' : 'title_desc';
+        } else if (this.sortField === 'price') {
+            value = this.sortAscending ? 'price_asc' : 'price_desc';
+        } else if (this.sortField === 'id') {
+            value = 'id_asc';
         }
         
-        // Update price sort icon
-        const priceIcon = document.getElementById('price-sort-icon');
-        if (this.sortField === 'price') {
-            priceIcon.className = this.sortAscending ? 'bi bi-sort-numeric-down' : 'bi bi-sort-numeric-up';
-        } else {
-            priceIcon.className = 'bi bi-sort-numeric-down';
-        }
+        sortDropdown.value = value;
+    }
+    
+    /**
+     * Reset all filters to default
+     */
+    resetToDefault() {
+        this.searchTerm = '';
+        this.selectedCategory = '';
+        this.sortField = 'id';
+        this.sortAscending = true;
+        this.currentPage = 1;
+        
+        // Reset UI elements
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) searchInput.value = '';
+        
+        const categoryFilter = document.getElementById('category-filter');
+        if (categoryFilter) categoryFilter.value = '';
+        
+        // Update sort dropdown
+        this.updateSortDropdown();
     }
     
     /**
@@ -165,11 +196,53 @@ class ProductTableApp {
     }
     
     /**
-     * Refresh data from source
+     * Refresh data from source and reset to default
      */
     async refreshData() {
+        // Reset all filters to default
+        this.resetToDefault();
+        
+        // Reload data
         await this.loadData();
+        
+        // Apply filters (which will use default settings)
         this.applyFilters();
+        
+        // Show notification
+        this.showNotification('Dữ liệu đã được làm mới!', 'success');
+    }
+    
+    /**
+     * Show notification
+     * @param {string} message - Notification message
+     * @param {string} type - Notification type (success, error, info)
+     */
+    showNotification(message, type = 'info') {
+        // Remove existing notification
+        const existingNotification = document.getElementById('app-notification');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+        
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.id = 'app-notification';
+        notification.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        notification.style.cssText = 'top: 20px; right: 20px; z-index: 1050; min-width: 300px;';
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                const bsAlert = new bootstrap.Alert(notification);
+                bsAlert.close();
+            }
+        }, 3000);
     }
     
     /**
@@ -201,6 +274,7 @@ class ProductTableApp {
     render() {
         this.updateStatistics();
         this.updateCategoryFilter();
+        this.updateSortDropdown();
         this.renderTable();
         this.updatePagination();
         this.updateRecordCount();

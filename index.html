@@ -50,9 +50,6 @@
         .search-box input {
             padding-left: 40px;
         }
-        .sort-btn {
-            min-width: 120px;
-        }
         .table th {
             background-color: #f8f9fa;
             font-weight: 600;
@@ -83,6 +80,9 @@
             font-size: 0.85rem;
             color: #6c757d;
         }
+        .sort-dropdown {
+            min-width: 200px;
+        }
     </style>
 </head>
 <body>
@@ -94,7 +94,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h1 class="h3 mb-2"><i class="bi bi-grid-3x3-gap"></i> Product Management System</h1>
-                            <p class="mb-0 opacity-75">Quản lý và hiển thị dữ liệu sản phẩm từ db.json</p>
+                            <!-- <p class="mb-0 opacity-75">Quản lý và hiển thị dữ liệu sản phẩm từ db.json</p> -->
                         </div>
                         <div class="last-updated">
                             <i class="bi bi-clock"></i> Cập nhật lần cuối: <span id="last-updated">Never</span>
@@ -151,21 +151,22 @@
                                 </select>
                             </div>
                             
-                            <!-- Sort Buttons -->
-                            <div class="col-md-5">
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-outline-primary sort-btn" onclick="productApp.toggleSort('title')">
-                                        <i class="bi bi-sort-alpha-down" id="title-sort-icon"></i>
-                                        Sắp xếp theo tên
-                                    </button>
-                                    <button class="btn btn-outline-primary sort-btn" onclick="productApp.toggleSort('price')">
-                                        <i class="bi bi-sort-numeric-down" id="price-sort-icon"></i>
-                                        Sắp xếp theo giá
-                                    </button>
-                                    <button class="btn btn-primary" onclick="productApp.refreshData()">
-                                        <i class="bi bi-arrow-clockwise"></i> Refresh
-                                    </button>
-                                </div>
+                            <!-- Sort Dropdown -->
+                            <div class="col-md-3">
+                                <select class="form-select sort-dropdown" id="sort-dropdown">
+                                    <option value="id_asc">Mặc định (sắp xếp theo ID)</option>
+                                    <option value="title_asc">Tên A → Z</option>
+                                    <option value="title_desc">Tên Z → A</option>
+                                    <option value="price_asc">Giá tăng dần</option>
+                                    <option value="price_desc">Giá giảm dần</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Refresh Button -->
+                            <div class="col-md-2">
+                                <button class="btn btn-primary w-100" onclick="productApp.refreshData()">
+                                    <i class="bi bi-arrow-clockwise"></i> Refresh
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -238,7 +239,7 @@
         <div class="row mt-4">
             <div class="col-12">
                 <div class="text-center text-muted">
-                    <p class="mb-1">Product Management System &copy; 2023 | Dữ liệu từ <code>db.json</code></p>
+                    <p class="mb-1">Product Management System &copy; 2026 | Dữ liệu từ <code>db.json</code></p>
                     <p class="mb-0 small">2280600563 Bùi Thành Đạt</p>
                 </div>
             </div>
