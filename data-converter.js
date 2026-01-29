@@ -32,7 +32,14 @@ class DataConverter {
                 },
                 images: Array.isArray(product.images) ? product.images.map(img => String(img)) : [],
                 creationAt: String(product.creationAt || ''),
-                updatedAt: String(product.updatedAt || '')
+                updatedAt: String(product.updatedAt || ''),
+                isDeleted: Boolean(product.isDeleted || false),
+                comments: Array.isArray(product.comments) ? product.comments.map(comment => ({
+                    id: String(comment.id || ''),
+                    content: String(comment.content || comment.text || ''),
+                    author: String(comment.author || 'Anonymous'),
+                    createdAt: String(comment.createdAt || new Date().toISOString())
+                })) : []
             }));
         } catch (error) {
             console.error('Error parsing JSON:', error);
