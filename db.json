@@ -1,4 +1,5 @@
-[
+{"$schema": "./node_modules/json-server/schema.json",
+"product":[
     {
         "id": 160,
         "title": "External Hard Drive",
@@ -779,4 +780,12 @@
         "creationAt": "2026-01-28T02:55:46.000Z",
         "updatedAt": "2026-01-28T02:55:46.000Z"
     }
-]
+],
+ "comments": [
+    { "id": "1", "text": "a comment about post 1", "postId": "1" },
+    { "id": "2", "text": "another comment about post 1", "postId": "1" }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}

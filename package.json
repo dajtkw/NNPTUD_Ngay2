@@ -9,11 +9,19 @@
     "serve": "npx http-server",
     "test": "echo \"No tests specified\" && exit 0"
   },
-  "keywords": ["product", "table", "data", "json"],
+  "keywords": [
+    "product",
+    "table",
+    "data",
+    "json"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "live-server": "^1.2.2",
-    "http-server": "^14.1.1"
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
+  },
+  "dependencies": {
+    "json-server": "^1.0.0-beta.5"
   }
 }
